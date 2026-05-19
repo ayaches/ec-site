@@ -39,6 +39,7 @@
             <p th:text="${product.description}"></p>
             <hr>
 
+            <!-- 認証済みユーザーのみカート追加ボタン表示 -->
             <div sec:authorize="isAuthenticated()">
                 <form th:action="@{/cart/add}" method="post">
                     <input type="hidden" name="productId" th:value="${product.id}">

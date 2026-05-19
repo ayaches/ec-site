@@ -1,7 +1,9 @@
 package com.example.ecsite.config;
 
+import com.example.ecsite.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,14 +18,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
+        http
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/", "/products/**", "/auth/**", "/css/**", "/js/**")
+                        .requestMatchers("/", "/products/**", "/auth/**", "/contact/**", "/css/**", "/js/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
-                        .requestMatchers("/", "/products/**", "/auth/**", "/cart/**", "/css/**", "/js/**")
-                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
@@ -34,22 +35,25 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
                         .defaultSuccessUrl("/products", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/products")
+                        .permitAll()
                 );
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
