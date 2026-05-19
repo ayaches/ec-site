@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ecsite.mapper.UserMapper">
+
+    <select id="findAll" resultType="com.example.ecsite.model.User">
+        SELECT * FROM users ORDER BY id
+    </select>
+
+    <select id="findById" resultType="com.example.ecsite.model.User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <select id="findByEmail" resultType="com.example.ecsite.model.User">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (email, password, name, role)
+        VALUES (#{email}, #{password}, #{name}, #{role})
+    </insert>
+
+    <update id="update">
+        UPDATE users
+        SET email    = #{email},
+        password = #{password},
+        name     = #{name},
+        role     = #{role}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

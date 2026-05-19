@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>商品編集 | 管理画面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="~{fragments/nav :: nav}"></div>
 
+<div class="container mt-4" style="max-width: 640px;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin/products}">商品管理</a></li>
+            <li class="breadcrumb-item active">商品編集</li>
+        </ol>
+    </nav>
+    <h2 class="mb-4">商品編集</h2>
+
+    <form th:action="@{/admin/products/{id}/update(id=${product.id})}" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">商品名 <span class="text-danger">*</span></label>
+            <input type="text" id="name" name="name"
+                   class="form-control" th:value="${product.name}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">説明</label>
+            <textarea id="description" name="description"
+                      class="form-control" rows="4"
+                      th:text="${product.description}"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="price" class="form-label">価格（円） <span class="text-danger">*</span></label>
+                <input type="number" id="price" name="price"
+                       class="form-control" min="0"
+                       th:value="${product.price}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="stock" class="form-label">在庫数 <span class="text-danger">*</span></label>
+                <input type="number" id="stock" name="stock"
+                       class="form-control" min="0"
+                       th:value="${product.stock}" required>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="imageUrl" class="form-label">画像URL</label>
+            <input type="url" id="imageUrl" name="imageUrl"
+                   class="form-control"
+                   th:value="${product.imageUrl}">
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-warning">更新する</button>
+            <a th:href="@{/admin/products}" class="btn btn-outline-secondary">キャンセル</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

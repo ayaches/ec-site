@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ecsite.mapper.OrderMapper">
+
+    <select id="findByUserId" resultType="com.example.ecsite.model.Order">
+        SELECT * FROM orders WHERE user_id = #{userId} ORDER BY id DESC
+    </select>
+
+    <select id="findById" resultType="com.example.ecsite.model.Order">
+        SELECT * FROM orders WHERE id = #{id}
+    </select>
+
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (user_id, total_price, status)
+        VALUES (#{userId}, #{totalPrice}, #{status})
+    </insert>
+
+    <insert id="insertOrderItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_items (order_id, product_id, quantity, price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{price})
+    </insert>
+
+    <select id="findItemsByOrderId" resultType="com.example.ecsite.model.OrderItem">
+        SELECT * FROM order_items WHERE order_id = #{orderId}
+    </select>
+
+</mapper>
